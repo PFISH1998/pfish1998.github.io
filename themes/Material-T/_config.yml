@@ -11,14 +11,25 @@
 favicon: http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim
 apple_touch_icon: http://cdn.pfish.xyz/pic/20190126/hIIQ7WHb9VBV.png
 
+
 #---------------------------
 # 首页
 # Index Page
 #---------------------------
 index: 
+  banner_img: http://cdn.pfish.xyz/pic/20190126/bcYYhAKkFVXi.JPG
+  # available: 0 - 100
+  banner_img_height: 100
   subtitle:
     enable: true
-  head_img: http://cdn.pfish.xyz/pic/20190126/bcYYhAKkFVXi.JPG
+  auto_excerpt:
+    enable: true
+    length: 175
+  # available: _blank | _self
+  post_url_target: _self
+  post_info:
+    enable: true
+
 
 #---------------------------
 # 导航栏
@@ -32,11 +43,11 @@ navbar:
       about: /about/
   icons:
     enable: true
-    # tips: 'See me here'
+    tips: 'See me here'
     list: 
       github: https://github.com/PFISH1998
       weibo: https://weibo.com/u/5063744248
-      twitter: 
+      twitter:
   
 
 #---------------------------
@@ -44,45 +55,70 @@ navbar:
 # Post Page
 #---------------------------
 post: 
-  head_img: ../img/post-head.jpg
-  comments_type: 'disqus'
-  disqus: 
-    shortname:
+  banner_img: /img/
+  # available: 0 - 100
+  banner_img_height: 70
+  # available: 1 | 2
+  layout: 2
   toc: 
     enable: true
+  # Code Highlight Theme available: github | tomorrow | tomorrow-night | tomorrow-night-eighties
+  highlight:
+    enable: true
+    theme: tomorrow-night-eighties
+  comments: 
+    enable: true
+    type: disqus
 
-# Code Highlight
-# Theme available: github | tomorrow-night | tomorrow | tomorrow-night-eighties
-highlight:
-  enable: true
-  theme: github
+disqus:
+  shortname:
+
+# Valine
+# You can get your appid and appkey from https://leancloud.cn
+# More info available at https://valine.js.org
+valine:
+  enable: false # When enable is set to be true, leancloud_visitors is recommended to be closed for the re-initialization problem within different leancloud adk version.
+  appid:  # your leancloud application appid
+  appkey:  # your leancloud application appkey
+  notify: false # mail notifier, See: https://github.com/xCss/Valine/wiki
+  verify: false # Verification code
+  placeholder: 说点什么 # comment box placeholder
+  avatar: retro # gravatar style https://valine.js.org/avatar.html
+  pageSize: 10 # pagination size
+  visitor: false # leancloud-counter-security is not supported for now. When visitor is set to be true, appid and appkey are recommended to be the same as leancloud_visitors' for counter compatibility. Article reading statistic https://valine.js.org/visitor.html
+
 
 #---------------------------
 # 归档页
 # Archive Page
 #---------------------------
 archive: 
-  head_img: http://cdn.pfish.xyz/pic/20190126/VQqSjdKyLNer.JPG
+  banner_img: http://cdn.pfish.xyz/pic/20190126/VQqSjdKyLNer.JPG
+  # available: 0 - 100
+  banner_img_height: 70
 
 #---------------------------
 # 关于页
 # About Page
 #---------------------------
 about:
-  head_img: http://cdn.pfish.xyz/pic/20190116/ue8EPY0rkKcI.JPG
+  banner_img: http://cdn.pfish.xyz/pic/20190116/ue8EPY0rkKcI.JPG
+  # available: 0 - 100
+  banner_img_height: 60
   avatar: http://cdn.pfish.xyz/pic/20190116/zuts8XrRkm7h.jpeg?imageslim
   name: PFISH
   job: a student
   introduce: CODE / PICTURE / LIFE
-  extension:
+  extension: 
+  icons: 
+   github: https://github.com/PFISH1998
+   weibo: https://weibo.com/u/5063744248
+   twitter: 
 
-about_icons: 
-  github: https://github.com/PFISH1998
-  weibo: https://weibo.com/u/5063744248
-  twitter: 
 
 #---------------------------
 # 底部信息
 # Footer
 #---------------------------
 footer: <b>Hello World</b>
+
