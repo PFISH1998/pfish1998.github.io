@@ -18,11 +18,16 @@
     <meta name="description" content="���ˣ��ϵܣ�">
     <meta name="author" content="John Doe">
     <meta name="keywords" content="">
-    <title>PFISH</title>
+    <title>Test ~ PFISH</title>
     <link rel="stylesheet" href="/css/Material_Icons.css">
     <!-- <link rel="stylesheet" href="/css/font-awesome.css"> -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    
+        <link rel="stylesheet" href="/css/post.css">
+        
+            <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+        
     
 </head>
 
@@ -82,10 +87,11 @@
     </div>
 </nav>
     
-  <div class="page-header header-filter" data-parallax="true" style="background-image: url('https://i.loli.net/2018/10/13/5bc1af44bb064.jpg')">
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('../img/post-head.jpg')">
     
       <div class="container">
-        <h1 class="title text-center"></h1>
+        <h1 class="title text-center">Test</h1>
+        <p class="text-center"><b>Tuesday, January 15th 2019, 8:57 pm</b></p>
       </div>
     
   </div>
@@ -94,42 +100,54 @@
   <div class="main main-raised">
     <div class="container">
       <div class="section">
-        <div class="row">
-    <div class="col-md-10 offset-md-1">
-        
-        <div class="row post-card">
-            
-            
-                <div class="col-md-11">
-                    <a href="/2019/01/15/Test/" class="h3 title">Test</a>
-                    <p></p>
-                    <p class="h6">
-                        <i class="material-icons">date_range</i>2019-01-15
-                        
-                    </p>
-                </div>
-            
-        </div>
-       
-        
-        <div class="row post-card">
-            
-            
-                <div class="col-md-11">
-                    <a href="/2019/01/15/hello-world/" class="h3 title">Hello World</a>
-                    <p></p>
-                    <p class="h6">
-                        <i class="material-icons">date_range</i>2019-01-15
-                        
-                    </p>
-                </div>
-            
-        </div>
-       
-         
-        <br><br>
         
 
+
+<div class="row">
+    <div class="col-md-7 offset-md-2">
+        <div class="post_content tocbot-content">
+            <h1 id="这是一篇测试文章"><a href="#这是一篇测试文章" class="headerlink" title="这是一篇测试文章"></a>这是一篇测试文章</h1><h2 id="123"><a href="#123" class="headerlink" title="123"></a>123</h2>
+        </div>
+        <br><br>
+        <div>
+            <p>
+                    
+            </p>
+        </div>
+    </div>
+    <!-- TOC -->
+    
+        <div class="col-md-3">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#这是一篇测试文章"><span class="toc-text">这是一篇测试文章</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#123"><span class="toc-text">123</span></a></li></ol></li></ol>
+        </div>
+    
+</div>
+
+<!-- Comments -->
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+    
+        
+            <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'http://yoursite.com/2019/01/15/Test/'; 
+            this.page.identifier = '/2019/01/15/Test/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+        
+    
     </div>
 </div>
       </div>
@@ -153,6 +171,8 @@
 </footer>
       <!--   Core JS Files   -->
       <script src="/js/core/jquery.min.js"></script>
+      
+        <script src="/js/main.js"></script>
        
       <script src="/js/core/popper.min.js"></script>
       <script src="/js/core/bootstrap-material-design.min.js"></script>
@@ -164,6 +184,17 @@
       <!-- Control Center for Material Kit: parallax effects, scripts for the example pages etc -->
       <script src="/js/material-kit.min.js?v=2.0.5"></script>
       
+      
+        <script src="/js/plugins/prettify.js"></script>
+        <script>
+            $(window).on('load',function(){
+                $('pre').addClass('prettyprint linenums');
+                prettyPrint();
+            })
+        </script>
+        
+          
+        
       
 </body>
 </html>
