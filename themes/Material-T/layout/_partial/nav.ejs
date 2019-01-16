@@ -1,0 +1,37 @@
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="<%- url_for() %>">
+                <%= config.title %></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <% if(theme.menu.enable) { %>
+                        <% for(var i in theme.menu.list) { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<%- url_for(theme.menu.list[i]) %>">
+                                    <%= i %>
+                                </a>
+                            </li>
+                        <% } %>
+                    <% } %>
+                    <% if(theme.social_icons.enable) { %>
+                        <% for(var j in theme.social_icons.list) { %>
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="<%- theme.social_icons.list[j] %>" target="_blank" data-original-title="<%= theme.social_icons.tips %>">
+                                    <i class="fa fa-<%= j %>"></i>
+                                </a>
+                            </li>
+                        <% } %>
+                    <% } %>
+                </ul>
+            </div>
+    </div>
+</nav>
+    

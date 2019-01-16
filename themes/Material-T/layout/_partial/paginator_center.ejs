@@ -1,0 +1,14 @@
+<% if (page.total > 1){ %>
+    <div class="text-center">
+        <% if(page.prev != 0) { %>
+            <a class="btn btn-primary btn-just-icon btn-round" href="<%- url_for(page.prev_link) %>">
+                <i class="material-icons">navigate_before</i>
+            </a>
+        <% } %>
+        <% if(page.next != 0) { %>
+            <a class="btn btn-primary btn-just-icon btn-round" href="<%- url_for(page.next_link) %>">
+                <i class="material-icons">navigate_next</i>
+            </a>
+        <% } %>
+    </div>
+<% } %>

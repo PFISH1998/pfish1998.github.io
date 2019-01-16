@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<% if(is_home()) { %>
+<%    var head_img = theme.index_head_img %>
+<%    if(theme.subtitle.enable) { var subtitle = config.subtitle } %>
+<% } else if (page.type == 'about'){ %>
+<%    var head_img = theme.about.head_img || theme.index_head_img %>
+<%    var subtitle = '' %>
+<%    var body_class = "profile-page" %>
+<% } else if(is_archive) { %>
+<%    var head_img = theme.archive_head_img || theme.index_head_img %>
+<%    var subtitle = 'Archive' %>
+<% } else { %>
+<%    var subtitle = page.title %>
+<%    var head_img = theme.index_head_img %>
+<% } %>
+
+<%- partial('_partial/head') %>
+
+<body class="<%- body_class %> sidebar-collapse">
+<%- partial('_partial/nav') %>
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('<%- head_img %>')">
+    <% if(is_post()) { %>
+      <div class="container">
+        <h1 class="title text-center"><%- page.title %></h1>
+        <p class="text-center"><b><%- full_date(page.date, 'dddd, MMMM Do YYYY, h:mm a') %></b></p>
+      </div>
+    <% } else { %>
+      <div class="container">
+        <h1 class="title text-center"><%- subtitle %></h1>
+      </div>
+    <% } %>
+  </div>
+
+<% if(page.type == "about") { %>
+  <div class="main main-raised">
+    <div class="profile-content">
+      <div class="container">
+        <%- body %>
+      </div>
+    </div>
+  </div>  
+<% } else { %>
+  <div class="main main-raised">
+    <div class="container">
+      <div class="section">
+        <%- body %>
+      </div>
+    </div>
+  </div>
+<% } %>
+
+<%- partial('_partial/footer') %>
+</body>
+</html>
