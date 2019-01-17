@@ -56,8 +56,11 @@ toc:
 # Code Highlight
 # Theme available: github | tomorrow | tomorrow-night | tomorrow-night-eighties
 highlight:
-  enable: true
+  enable: false
   theme: tomorrow-night-eighties
+  line_number: false
+  auto_detect: false
+  tab_replace:
 
   
 #---------------------------
