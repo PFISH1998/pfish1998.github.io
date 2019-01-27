@@ -1,17 +1,18 @@
 ---
 title: ComputerNetworkNotes
 date: 2019-01-17 20:07:52
-tags: Notes
+tags: notes
 index_img: http://cdn.pfish.xyz/pic/20190117/5UStVDr4aF58.png?imageslim
+head_img: http://cdn.pfish.xyz/pic/20190117/5UStVDr4aF58.png
 ---
 
 本篇用来记一些计算机网络相关的笔记，主要是针对学过的进行巩固，以及总结一些可能会用到的知识点。
 <!--more-->
 
 ### TCP与UDP
-#### TCP (Transmission Contorl Protocol) 传输控制协议
+#### TCP 
 
-> 是一种面向连接的、可靠的、基于字节流的传输层通信协议，由IETF的RFC 793定义。在简化的计算机网络OSI模型中，它完成第四层传输层所指定的功能，用户数据报协议（UDP）是同一层内另一个重要的传输协议。
+> TCP (Transmission Contorl Protocol) 传输控制协议: 是一种面向连接的、可靠的、基于字节流的传输层通信协议，由IETF的RFC 793定义。在简化的计算机网络OSI模型中，它完成第四层传输层所指定的功能，用户数据报协议（UDP）是同一层内另一个重要的传输协议。
 
 两个使用TCP的应用在传输数据前必须建立一个TCP连接，然后通过这个连接彼此通信。
 
@@ -24,8 +25,8 @@ TCP通过三次握手创建连接，四次挥手终止连接。是面向连接�
 
 TCP 支持的应用有：Telnet、FTP、SMTP等。
 
-#### UDP(User Datagram Protocol) 用户数据报协议
->又称用户数据包协议，是一个简单的面向数据报的传输层协议。该协议由 David P. Reed 在 1980 年设计且在RFC 768中被规范。 
+#### UDP
+>UDP(User Datagram Protocol) 用户数据报协议:又称用户数据包协议，是一个简单的面向数据报的传输层协议。该协议由 David P. Reed 在 1980 年设计且在RFC 768中被规范。 
 
 TCP 是面向连接、可靠的，UDP是非面向连接、不可靠的。如图
 
@@ -115,7 +116,59 @@ HTTPS协议主要作用可分为两种：
 #### 断开连接或继续保持
 当请求完成，会根据不同情况使用四次挥手断开连接或者继续保持连接。
 
-### SESSION、COOKIES
+### Session、Cookies
+#### Session
+> 会话（Session）是用来跟踪用户的整个会话的一种技术。通过在服务端记录客户端状态。
+
+当客户端访问服务器的时候，服务端把客户端信息以某种形式记录在服务器上，这就是Session。当客户端再次访问时只需要从该Session中查找该客户的状态就可以了。
+
+Java Servlet 通过request.getSession()方法获得客户的Session:
+
+ ```Java
+// 获得一个Session对象
+HttpSession session = request.getSession();
+// 设置Session中的属性
+session.setAttribute("loginTime", new Date())
+// 获得Session中的属性
+Date loginTime = (Date)session.getAttribute("loginTime")
+ ```
+
+通过Session可以唯一确定一个用户，各客户端的Session也彼此独立，互不可见。这样服务端和客户端就能安全的交流。
+
+#### Cookies
+> Cookies意为“甜饼”、“曲奇”，它通过在客户端记录信息确定用户的身份。
+
+HTTP协议是无状态的，为了弥补这个不足，在Session出现之前，网站几乎都是用Cookies来跟踪会话。
+
+就是每个客户端保存一个通行证，当访问服务端时带上这个通行证，服务端就能确定客户身份了。
+
+在浏览器地址栏输入：
+ ```JavaScript
+ javascript: alert(doucument.cookie)
+ ```
+就能查看本网站颁发的所有Cookie的内容。
+
+例如在爬虫程序的开发里，就会遇到登录并需要保持一个Cookies的情况。这时候利用requests库的Session对象能够帮助我们在跨请求操作时保持某些参数。
+
+ ```Python
+s = requests.Session()
+# 请求参数
+req_param = {
+      'username': 'pengyu',
+      'password': 'pwd123'
+      }
+s.post("http://www.webpage.com/login", json=json.loads(req_param))
+# 通过保持的Cookies信息达到跨请求操作的目的
+response = s.get("http://www.webpage.com/info")
+ ```
+
+#### Session与Cookies的不同
+
+||Session|Cookies|
+|-|-|-|
+|保存位置|服务端|客户端|
+|隐私策略|较为安全|不安全|
+|长度限制|无限制|有限制|
 
 ### OSI网络结构与TCP/IP
 

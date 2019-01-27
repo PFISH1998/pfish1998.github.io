@@ -1,5 +1,6 @@
 ﻿#---------------------------
 # Material-T
+# 一款Material Design风格的HEXO主题
 # Author: invom
 # Github: https://github.com/invom/Material-T
 #---------------------------
@@ -8,61 +9,65 @@
 # 全局
 # Site
 #---------------------------
-favicon: http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim
-apple_touch_icon: http://cdn.pfish.xyz/pic/20190126/hIIQ7WHb9VBV.png
+favicon: http://cdn.pfish.xyz/pic/20190116/6LuHHSdCAU6U.png?imageslim
+apple_touch_icon: http://cdn.pfish.xyz/pic/20190116/Bb28gqNcpNKm.png?imageslim
+
 
 #---------------------------
 # 首页
 # Index Page
 #---------------------------
-index: 
-  subtitle:
-    enable: true
-  head_img: http://cdn.pfish.xyz/pic/20190126/bcYYhAKkFVXi.JPG
+subtitle:
+  enable: true
+
+index_head_img: https://i.loli.net/2018/10/13/5bc1af44bb064.jpg 
 
 #---------------------------
 # 导航栏
 # Head Navbar
 #---------------------------
-navbar:
-  menu:
-    enable: true
-    list:
-      archives: /archives/
-      about: /about/
-  icons:
-    enable: true
-    tips: 'See me here'
-    list: 
-      github: https://github.com/PFISH1998
-      weibo: https://weibo.com/u/5063744248
-      twitter: 
+menu:
+  enable: true
+  list:
+    archives: /archives/
+    about: /about/
+  
+
+social_icons:
+  enable: true
+  tips: 'See me here'
+  list: 
+    github: https://github.com/PFISH1998
+    weibo: https://weibo.com/u/5063744248
+    twitter: 
   
 
 #---------------------------
 # 文章页
 # Post Page
 #---------------------------
-post: 
-  head_img: ../img/post-head.jpg
-  comments_type: 'disqus'
-  disqus: 
-    shortname:
-  toc: 
-    enable: true
+comments_type: 'disqus'
+disqus: 
+  shortname:
+
+toc: 
+  enable: true
 
 # Code Highlight
-# Theme available: github | tomorrow-night | tomorrow | tomorrow-night-eighties
+# Theme available: github | tomorrow | tomorrow-night | tomorrow-night-eighties
 highlight:
-  enable: true
-  theme: github
+  enable: false
+  theme: tomorrow-night-eighties
+  line_number: false
+  auto_detect: false
+  tab_replace:
 
+  
 #---------------------------
 # 归档页
 # Archive Page
 #---------------------------
-archive: 
-  head_img: http://cdn.pfish.xyz/pic/20190126/VQqSjdKyLNer.JPG
+archive_head_img: http://cdn.pfish.xyz/pic/20190116/3hyL7kWcVKrO.jpg?imageslim
 
 #---------------------------
 # 关于页
@@ -80,6 +85,7 @@ about_icons:
   github: https://github.com/PFISH1998
   weibo: https://weibo.com/u/5063744248
   twitter: 
+
 
 #---------------------------
 # 底部信息
