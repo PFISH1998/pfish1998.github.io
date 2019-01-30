@@ -89,11 +89,3 @@ head_img: http://cdn.pfish.xyz/pic/20190126/DGr1LldOTfLW.png
 最后输出波形图文件名wave.png
 
 <img src="http://cdn.pfish.xyz/pic/20190126/SPutfAzJXFsd.png?imageslim" width="80%">
-
-代码
-
-
- ```Python
- class Test:
-      def __init__(self, *args, **kwargs):
- ```

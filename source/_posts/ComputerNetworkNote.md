@@ -187,7 +187,7 @@ response = s.get("http://www.webpage.com/info")
 #### TCP/IP协议
 
 |TCP/IP五层模型|协议|
-|-|-|
+|:-:|:-:|
 |应用层|HTTP、FTP、Telnet、TFTP、DNS、SMTP|
 |传输层|TCP、UDP|
 |网络层|IP、ICMP、RIP、IGMP|
@@ -195,10 +195,15 @@ response = s.get("http://www.webpage.com/info")
 |物理层|FE自协商、Manchester、MLT-3|
 
 
+
 ### 握手与挥手
 > 主要用于建立和断开TCP的连接
 
 #### 三次握手
 > 握手只能由客户端发起
+ACK
+
+
+
 
 #### 四次挥手

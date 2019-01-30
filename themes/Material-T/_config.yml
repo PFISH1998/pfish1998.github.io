@@ -32,7 +32,7 @@ navbar:
       about: /about/
   icons:
     enable: true
-    tips: 'See me here'
+    # tips: 'See me here'
     list: 
       github: https://github.com/PFISH1998
       weibo: https://weibo.com/u/5063744248
