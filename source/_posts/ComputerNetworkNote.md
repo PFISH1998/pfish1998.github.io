@@ -200,7 +200,8 @@ response = s.get("http://www.webpage.com/info")
 > 主要用于建立和断开TCP的连接
 
 #### 三次握手
-> 握手只能由客户端发起
+> 握手只能由客户端发起，用于建立一个TCP连接
+
 ACK
 
 
