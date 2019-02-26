@@ -3,7 +3,7 @@ title: ComputerNetworkNotes
 date: 2019-01-17 20:07:52
 tags: notes
 index_img: http://cdn.pfish.xyz/pic/20190117/5UStVDr4aF58.png?imageslim
-head_img: http://cdn.pfish.xyz/pic/20190117/5UStVDr4aF58.png
+banner_img: http://cdn.pfish.xyz/pic/20190117/5UStVDr4aF58.png
 ---
 
 本篇用来记一些计算机网络相关的笔记，主要是针对学过的进行巩固，以及总结一些可能会用到的知识点。
@@ -212,4 +212,5 @@ response = s.get("http://www.webpage.com/info")
 > 谢希仁《计算机网络》中提到：“是为了防止已失效的连接请求报文段突然又传送到服务端，产生错误”
 
 **因为在现实网络环境并不是那么理想，客户端或服务端发送的报文都可能会在网络某处中阻塞导致延迟到达，而如果此时服务器还认为这是一次连接请求，那么就会导致一直等待客户端发送下一次请求，从而影响服务器的性能**
+
 #### 四次挥手
