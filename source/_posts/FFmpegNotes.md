@@ -3,7 +3,7 @@ title: FFmpegNotes
 date: 2019-01-24 15:47:21
 tags: notes
 index_img: http://cdn.pfish.xyz/pic/20190126/DGr1LldOTfLW.png
-head_img: http://cdn.pfish.xyz/pic/20190126/DGr1LldOTfLW.png
+banner_img: http://cdn.pfish.xyz/pic/20190126/DGr1LldOTfLW.png
 ---
 一些关于学习FFmpeg的笔记，从未发现处理视频和音频原来可以这么简单！
 <!--more-->
