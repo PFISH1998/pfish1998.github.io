@@ -3,7 +3,7 @@ title: Hexo在GitHubPages上的应用
 date: 2019-01-16 15:36:12
 tags: GitHub,Hexo,博客
 index_img: http://cdn.pfish.xyz/pic/20190116/3hyL7kWcVKrO.jpg?imageslim
-head_img: http://cdn.pfish.xyz/pic/20190116/3hyL7kWcVKrO.jpg
+banner_img: http://cdn.pfish.xyz/pic/20190116/3hyL7kWcVKrO.jpg
 
 ---
 在GitHub上用Hexo主题搭建一个简单的个人博客，使用MarkDown格式发布。
