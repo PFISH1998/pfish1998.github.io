@@ -3,7 +3,7 @@ title: SOMEPHOTO
 date: 2018-12-25 21:03:44
 tags: photo
 index_img: http://cdn.pfish.xyz/pic/20190125/het6w53EpGhS.JPG
-head_img: http://cdn.pfish.xyz/pic/20190125/het6w53EpGhS.JPG
+banner_img: http://cdn.pfish.xyz/pic/20190125/het6w53EpGhS.JPG
 ---
 今年暑假在成都玩时拍的一些图片
 <!--more-->
