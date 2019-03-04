@@ -146,7 +146,7 @@ Python 模拟运行 JavaScript 代码的代码：
 
  `response = requests.post(url, data={"encoded": result})`
 
- 但一般登录后如果还要进行页面跳转选择之类的操作的话，还得用 sesion 方法
+ 但一般登录后如果还要进行页面跳转选择之类的操作的话，还得用 requests.Session() 方法
 
   ```Python
   import requests
