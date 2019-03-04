@@ -2,7 +2,7 @@
 title: Python爬虫应对网页JavaScirpt混淆/加密
 date: 2019-03-02 14:50:39
 tags: Python
-head_img: http://cdn.pfish.xyz/pic/20190302/XdFeTC30lFeh.png
+index_img: http://cdn.pfish.xyz/pic/20190302/XdFeTC30lFeh.png
 banner_img: http://cdn.pfish.xyz/pic/20190302/Mbv8boBESUFO.png
 ---
 最近在处理一个登录爬虫时，遇到了在网页端运用JavaScript混淆和对用户名密码加密的手段，但不是很复杂。
