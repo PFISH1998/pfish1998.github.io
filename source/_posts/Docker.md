@@ -36,3 +36,12 @@ Namespace 可以有效的帮助 Docker 将进程树、网络接口、消息、�
 
 #### pid namespace
 
+可以将不同的进程隔离开，在不同的 namespace 中可以有相同的 pid。并且 namespace 允许嵌套，父 namespace 可以影响子 namespace 进程。
+
+所有的 LXC 进程在 docker 中的进程的父进程为 docker 进程。
+
+#### net namespace
+
+拥有独立的 network devices, IP address, IP routing tables, /proc/net 目录。这样每个 container 的网络就能隔离开。
+
+LXC 在此基础上有5中网络类型，docker 默认采用 veth 的方式将 container 中的虚拟网卡同 host 上的一个 docker bridge 连接在一起。
