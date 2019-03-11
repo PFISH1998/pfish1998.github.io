@@ -54,3 +54,7 @@ container 中进程交互还是采用 Linux 常见的进程间交互方法(inter
 
 类似与chroot，将一个进程放到一个特定的目录执行。 mnt namespace 允许不同namespace 的进程看到的文件目录不同，这样每个 namespace 中的进程所看到的文件目录就被隔离开了。
 
+#### uts namespace
+
+UTS(UNIX Time-sharing Systerm) namespace 允许每个 container 拥有独立的 hostname 和 domain name, 使其在网络上可以被视为一个独立的节点而非 Host 上的一个进程。
+
