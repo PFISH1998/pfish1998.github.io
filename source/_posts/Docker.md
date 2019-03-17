@@ -63,3 +63,7 @@ UTS(UNIX Time-sharing Systerm) namespace 允许每个 container 拥有独立的 
 每个 container 可以有不同的 user 和 group id， 也就是说可以以 container 内部的用户在 container 内部执行程序，而非 Host 上的用户。
 
 有上述6中 namespace 从进程、网络、IPC、文件系统、UTS和用户角度的隔离，一个 container 就可以对外展现出一个独立计算机的能力，并且不同 container 从 OS 的层面实现了隔离。
+
+### Control Groups (Cgroups)
+
+Cgroups 实现了对资源的配额和度量。Cgoups 的使用类似文件的接口，
