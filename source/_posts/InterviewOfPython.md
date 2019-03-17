@@ -2,8 +2,8 @@
 title: InterviewOfPython
 date: 2019-02-25 22:36:52
 tags: interview
-index_img: http://cdn.pfish.xyz/pic/20190225/qIX3hSuva4Qp.jpg
-banner_img: http://cdn.pfish.xyz/pic/20190225/xbYSoit4YeG0.jpg
+index_img: http://cdn.pfish.xyz/image/20190317/vkB7bJPV1AoK.jpg
+banner_img: http://cdn.pfish.xyz/image/20190317/v1LjxJfLqbIv.jpg
 ---
 
 有关于Python的一些知识点
