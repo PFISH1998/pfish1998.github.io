@@ -1,30 +1,30 @@
 <h1 align="center">Material-T</h1>
 
-<p align="center">一款 Material Design 风格的主题，灵感来源于 <a href="https://github.com/creativetimofficial/material-kit">Material-Kit</a></p>
+<p align="center">一款 Material Design 风格的主题</p>
 
 <p align="center">
-  <a href="https://join.slack.com/t/material-t/shared_invite/enQtNTQ2NjA3OTAzOTQwLWIyNGZlYWE2N2U2ZWEzMzBlNDZlYjQxNmI3NGM2Njk4ODUzYTY2MTdmNzRhYjgyYTY5NGZlOTc2YTk1YTMzNDg"><img src="https://img.shields.io/badge/chat-on%20slack-blueviolet.svg"></a>
-  <a href="https://github.com/invom/Material-T/issues?q=is%3Aopen+is%3Aissue+label%3Anotification"><img alt="notification" src="https://img.shields.io/github/issues-raw/invom/Material-T/notification.svg?label=notification&style=flat"></a>
-  <img alt="contributors" src="https://img.shields.io/github/contributors/invom/Material-T.svg?style=flat">
-  <img alt="license" src="https://img.shields.io/github/license/invom/Material-T.svg?style=flat">
+  <img alt="GitHub repo size in bytes" src="https://img.shields.io/github/repo-size/0x2e/Material-T.svg">
+  <a href="https://github.com/0x2e/Material-T/issues?q=is%3Aopen+is%3Aissue+label%3Anotification"><img alt="notification" src="https://img.shields.io/github/issues-raw/0x2e/Material-T/notification.svg?label=notification&style=flat"></a>
+  <img alt="contributors" src="https://img.shields.io/github/contributors/0x2e/Material-T.svg?style=flat">
+  <img alt="license" src="https://img.shields.io/github/license/0x2e/Material-T.svg?style=flat">
 </p>
 
-![screenshot-index](https://github.com/invom/Material-T/raw/master/screenshot-index.png)
+![ScreenShot](https://i.imgur.com/mMHoZJE.png)
 
 
-## 在线预览 Live Preview
+## Demo
 
-[invom's blog](https://invom.cc)
+[rook1e's blog](https://0x2e.github.io)
 
-## [文档 Document](http://invom.github.io/Material-T-docs)
+## [文档 Docs](http://0x2e.github.io/Material-T-docs)
 
-## 安装 Installation
+## 快速开始 Quick Start
 
 **1.** 获取最新版本
 
 ```bash
 cd themes
-git clone -b master https://github.com/invom/Material-T.git Material-T
+git clone -b master https://github.com/0x2e/Material-T.git Material-T
   ```
 
 **2.** 修改 Hexo 的`_config.yml`
@@ -56,18 +56,29 @@ hexo new page about
 
 **4.** 在 Hexo 的 `_config.yml` 中启用 `Material-T`
 
-## 更新
+## 更新 Update
 
-`git pull`
+> `v0.9` 向上升级时，建议先备份，然后直接用新版本替换，以免 `git pull` 时出现过多冲突。
 
+```bash
+cd /themes/Material-T
+git pull
+```
+## Changelog
 
-## [TODO](https://github.com/invom/Material-T/projects)
+2019/3/15
+- 重新设计基本完成，特别感谢 @zhugaoqi 同学的设计指导；
+- 将所有第三方库、图片替换为 CDN 引用，极大精简仓库大小；
+- 重新设计 archive 渲染逻辑；
+- 统一文章页布局，新增文章版权声明；
+- 精简页面，配置项;
+- 老版本停止维护，代码暂时归档在 v0.9 分支，如有需要请 fork 备份；
 
+## Contributors
 
-## 贡献 Contributing
+感谢：@zhugaoqi, @ChungZH
 
-项目会持续更新，期待您的 Pull Request
-
+## [TODO](https://github.com/0x2e/Material-T/projects)
 
 ## License
 
