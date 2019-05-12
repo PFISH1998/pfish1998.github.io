@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim">
+    <link rel="icon" type="image/png" href="http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="���ˣ��ϵܣ�">
+    <meta name="author" content="John Doe">
+    <meta name="keywords" content>
+    <title>ComputerNetworkNotes ~ PFISH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/github.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>PFISH</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">About</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("http://cdn.pfish.xyz/pic/20190117/5UStVDr4aF58.png")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">ComputerNetworkNotes</p>
+            <br>
+            
+            <p>Thursday, January 17th 2019, 8:07 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <p>本篇用来记一些计算机网络相关的笔记，主要是针对学过的进行巩固，以及总结一些可能会用到的知识点。<br><a id="more"></a></p>
+<h3 id="TCP与UDP"><a href="#TCP与UDP" class="headerlink" title="TCP与UDP"></a>TCP与UDP</h3><h4 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h4><blockquote>
+<p>TCP (Transmission Contorl Protocol) 传输控制协议: 是一种面向连接的、可靠的、基于字节流的传输层通信协议，由IETF的RFC 793定义。在简化的计算机网络OSI模型中，它完成第四层传输层所指定的功能，用户数据报协议（UDP）是同一层内另一个重要的传输协议。</p>
+</blockquote>
+<p>两个使用TCP的应用在传输数据前必须建立一个TCP连接，然后通过这个连接彼此通信。</p>
+<p>TCP通过三次握手创建连接，四次挥手终止连接。是面向连接的、可靠的传输。应用了许多重要机制保证可靠：</p>
+<ul>
+<li>使用序号对接收的报文进行排序和检验重复的数据。</li>
+<li>使用校验和检测报文段的错误。</li>
+<li>使用确认和计时器来检测和纠正丢包或延时。</li>
+<li>流控制、拥塞控制、丢包重传等。</li>
+</ul>
+<p>TCP 支持的应用有：Telnet、FTP、SMTP等。</p>
+<h4 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h4><blockquote>
+<p>UDP(User Datagram Protocol) 用户数据报协议:又称用户数据包协议，是一个简单的面向数据报的传输层协议。该协议由 David P. Reed 在 1980 年设计且在RFC 768中被规范。 </p>
+</blockquote>
+<p>TCP 是面向连接、可靠的，UDP是非面向连接、不可靠的。如图</p>
+<p><img src="http://cdn.pfish.xyz/pic/20190117/8HIzeGwMSOEF.png?imageslim" width="100%"></p>
+<blockquote>
+<p>上课的时候被UDP的头部（TCP也一样）弄得很懵，以后有空搞懂了再来补充把</p>
+</blockquote>
+<p>UDP一般允许一定量的丢包、出错和复制粘贴。但有些应用有需要的话会在应用层增加根本的可靠机制。类似如今的直播、视频点播、游戏和网络电话等大部分都是典型的UDP应用。</p>
+<p>由于缺乏像TCP一样的拥塞控制，UDP发送者是不能够监测拥塞的。</p>
+<p>使用UDP协议的一些应用有：DNS、(简单网络管理协议)SNMP、DHCP、RIP等。</p>
+<h3 id="HTTP与HTTPS"><a href="#HTTP与HTTPS" class="headerlink" title="HTTP与HTTPS"></a>HTTP与HTTPS</h3><h4 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h4><blockquote>
+<p>HTTP(Hyper Text Transport Protocol) 超文本传输协议，HTTP是万维网的数据通信的基础。</p>
+</blockquote>
+<p>一般用来发布和请求由统一资源定位符(URL)标识的资源，默认端口80，HTTP1.1协议中定义了八种方法(动作)来操作指定的资源：</p>
+<ul>
+<li><strong>GET</strong><br>向指定资源发出“显示”请求，读取数据，是幂等操作。</li>
+<li><strong>POST</strong><br>向指定资源提交数据，请求服务器处理。非幂等操作。</li>
+<li><strong>PUT</strong><br>与POST差不多，一般用于更新资源。</li>
+<li><strong>DELETE</strong><br>请求服务器删除Request-URL所标识的资源。</li>
+<li><strong>HEAD</strong><br>与GET方法一样，请求指定资源。只不过服务器不返回资源的文本部分。</li>
+<li><strong>TRACE</strong><br>回显服务器收到的请求，主要用于诊断或测试。</li>
+<li><strong>OPTIONS</strong><br>使服务器传回该资源所支持的所有HTTP请求方法。</li>
+<li><strong>PATCH</strong><br>将局部修改应用到资源</li>
+<li><strong>CONNECT</strong><br>HTTP1.1协议中预留的，将连接改为管道方式的代理服务器。通常用于ssl连接</li>
+</ul>
+<h4 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h4><blockquote>
+<p>HTTPS 与 HTTP 并不是两种完全不同的协议，HTTPS是在HTTP上加了一层SSL使得连接更加的安全。</p>
+</blockquote>
+<p>HTTPS协议主要作用可分为两种：</p>
+<ul>
+<li>一种是建立一个信息安全通道，来保证数据传输的安全；</li>
+<li>另一种就是确认网站的真实性。</li>
+</ul>
+<p>使用HTTPS需要CA证书，现在注册个人域名一般都能免费申请。</p>
+<p>现在HTTPS已经成为很普及的技术了，苹果的App Store以及PWA(Progressive Web App)和微信小程序等都要求开发者必须使用HTTPS。</p>
+<h5 id="HTTPS的缺点"><a href="#HTTPS的缺点" class="headerlink" title="HTTPS的缺点"></a>HTTPS的缺点</h5><ol>
+<li>握手协议阶段花费时间比HTTP长。</li>
+<li>SSL证书的成本比较高。</li>
+<li>并不是绝对安全，加密范围有限。</li>
+</ol>
+<h3 id="从输入网址到显示网页这中间发生了什么？"><a href="#从输入网址到显示网页这中间发生了什么？" class="headerlink" title="从输入网址到显示网页这中间发生了什么？"></a>从输入网址到显示网页这中间发生了什么？</h3><h4 id="输入网址"><a href="#输入网址" class="headerlink" title="输入网址"></a>输入网址</h4><p>检测是否为合法url,格式是否正确</p>
+<h4 id="查询DNS"><a href="#查询DNS" class="headerlink" title="查询DNS"></a>查询DNS</h4><p>先从本地DNS缓存查询是否有域名对应的IP，再从本地计算机、路由器等地方查询，有则使用，没有就向上级DNS服务器发起请求，找不到则继续往上级查询，直至根域名服务器，找到对应的IP。</p>
+<h4 id="连接网站服务器"><a href="#连接网站服务器" class="headerlink" title="连接网站服务器"></a>连接网站服务器</h4><h5 id="建立TCP连接"><a href="#建立TCP连接" class="headerlink" title="建立TCP连接"></a>建立TCP连接</h5><p>利用三次握手建立一个TCP连接。</p>
+<h5 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h5><p>然后根据网址开头的HTTP、HTTPS等协议的不同，请求该IP所对应服务器的不同端口（分别为80、443）</p>
+<h4 id="服务器处理请求"><a href="#服务器处理请求" class="headerlink" title="服务器处理请求"></a>服务器处理请求</h4><p>以上步骤顺利都进行后，服务器会接收到HTTP请求，然后将收到的HTTP报文封装成HTTP Request对象，再进一步交给WEB服务器（Nginx，Tomcat，uwsgi等）处理<br>，处理完的结果以HTTP Response对象返回，主要包括：响应头、状态码、响应报文三个部分。</p>
+<h4 id="浏览器处理响应"><a href="#浏览器处理响应" class="headerlink" title="浏览器处理响应"></a>浏览器处理响应</h4><p>当浏览器接收到服务器的响应后，会根据状态码做一个判断，<br>状态码主要包括以下部分：<br>1xx：指示信息–表示请求已接收，继续处理。<br>2xx：成功–表示请求已被成功接收、理解、接受。<br>3xx：重定向–要完成请求必须进行更进一步的操作。<br>4xx：客户端错误–请求有语法错误或请求无法实现。<br>5xx：服务器端错误–服务器未能实现合法的请求。</p>
+<p>并拿到返回的数据。</p>
+<h5 id="页面渲染"><a href="#页面渲染" class="headerlink" title="页面渲染"></a>页面渲染</h5><p>这一步也是包含在浏览器处理中，当响应的内容是一个HTTP文档时，就开始解析并渲染页面（这一步涉及前端知识很多，建立DOM树之类，不详细说了），当遇到一些外链，如图片，JS文件等，继续重复请求上几步过程下载资源。</p>
+<h4 id="断开连接或继续保持"><a href="#断开连接或继续保持" class="headerlink" title="断开连接或继续保持"></a>断开连接或继续保持</h4><p>当请求完成，会根据不同情况使用四次挥手断开连接或者继续保持连接。</p>
+<h3 id="Session、Cookies"><a href="#Session、Cookies" class="headerlink" title="Session、Cookies"></a>Session、Cookies</h3><h4 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h4><blockquote>
+<p>会话（Session）是用来跟踪用户的整个会话的一种技术。通过在服务端记录客户端状态。</p>
+</blockquote>
+<p>当客户端访问服务器的时候，服务端把客户端信息以某种形式记录在服务器上，这就是Session。当客户端再次访问时只需要从该Session中查找该客户的状态就可以了。</p>
+<p>Java Servlet 通过request.getSession()方法获得客户的Session:</p>
+<pre><code class="Java">// 获得一个Session对象
+HttpSession session = request.getSession();
+// 设置Session中的属性
+session.setAttribute(&quot;loginTime&quot;, new Date())
+// 获得Session中的属性
+Date loginTime = (Date)session.getAttribute(&quot;loginTime&quot;)
+</code></pre>
+<p>通过Session可以唯一确定一个用户，各客户端的Session也彼此独立，互不可见。这样服务端和客户端就能安全的交流。</p>
+<h4 id="Cookies"><a href="#Cookies" class="headerlink" title="Cookies"></a>Cookies</h4><blockquote>
+<p>Cookies意为“甜饼”、“曲奇”，它通过在客户端记录信息确定用户的身份。</p>
+</blockquote>
+<p>HTTP协议是无状态的，为了弥补这个不足，在Session出现之前，网站几乎都是用Cookies来跟踪会话。</p>
+<p>就是每个客户端保存一个通行证，当访问服务端时带上这个通行证，服务端就能确定客户身份了。</p>
+<p>在浏览器地址栏输入：</p>
+<pre><code class="JavaScript"> javascript: alert(doucument.cookie)
+</code></pre>
+<p>就能查看本网站颁发的所有Cookie的内容。</p>
+<p>例如在爬虫程序的开发里，就会遇到登录并需要保持一个Cookies的情况。这时候利用requests库的Session对象能够帮助我们在跨请求操作时保持某些参数。</p>
+<pre><code class="Python">s = requests.Session()
+# 请求参数
+req_param = {
+      &#39;username&#39;: &#39;pengyu&#39;,
+      &#39;password&#39;: &#39;pwd123&#39;
+      }
+s.post(&quot;http://www.webpage.com/login&quot;, json=json.loads(req_param))
+# 通过保持的Cookies信息达到跨请求操作的目的
+response = s.get(&quot;http://www.webpage.com/info&quot;)
+</code></pre>
+<h4 id="Session与Cookies的不同"><a href="#Session与Cookies的不同" class="headerlink" title="Session与Cookies的不同"></a>Session与Cookies的不同</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>Session</th>
+<th>Cookies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>保存位置</td>
+<td>服务端</td>
+<td>客户端</td>
+</tr>
+<tr>
+<td>隐私策略</td>
+<td>较为安全</td>
+<td>不安全</td>
+</tr>
+<tr>
+<td>长度限制</td>
+<td>无限制</td>
+<td>有限制</td>
+</tr>
+</tbody>
+</table>
+<h3 id="OSI网络结构与TCP-IP"><a href="#OSI网络结构与TCP-IP" class="headerlink" title="OSI网络结构与TCP/IP"></a>OSI网络结构与TCP/IP</h3><h4 id="OSI-七层模型"><a href="#OSI-七层模型" class="headerlink" title="OSI 七层模型"></a>OSI 七层模型</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">OSI参考模型</th>
+<th style="text-align:center">各层解释</th>
+<th style="text-align:center">TCP/IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">应用层</td>
+<td style="text-align:center">为应用层提供服务</td>
+</tr>
+<tr>
+<td style="text-align:center">表示层</td>
+<td style="text-align:center">数据格式转换，数据加密</td>
+</tr>
+<tr>
+<td style="text-align:center">会话层</td>
+<td style="text-align:center">建立、管理和维护会话</td>
+<td style="text-align:center">应用层</td>
+</tr>
+<tr>
+<td style="text-align:center">传输层</td>
+<td style="text-align:center">建立、管理和维护端到端的连接</td>
+<td style="text-align:center">传输层</td>
+</tr>
+<tr>
+<td style="text-align:center">网络层</td>
+<td style="text-align:center">IP选址及路由选择</td>
+<td style="text-align:center">网络层</td>
+</tr>
+<tr>
+<td style="text-align:center">数据链路层</td>
+<td style="text-align:center">提供介质访问和链路管理</td>
+<td style="text-align:center">数据链路层</td>
+</tr>
+<tr>
+<td style="text-align:center">物理层</td>
+<td style="text-align:center">物理层</td>
+<td style="text-align:center">物理层</td>
+</tr>
+</tbody>
+</table>
+<h4 id="TCP-IP协议"><a href="#TCP-IP协议" class="headerlink" title="TCP/IP协议"></a>TCP/IP协议</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">TCP/IP五层模型</th>
+<th style="text-align:center">协议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">应用层</td>
+<td style="text-align:center">HTTP、FTP、Telnet、TFTP、DNS、SMTP</td>
+</tr>
+<tr>
+<td style="text-align:center">传输层</td>
+<td style="text-align:center">TCP、UDP</td>
+</tr>
+<tr>
+<td style="text-align:center">网络层</td>
+<td style="text-align:center">IP、ICMP、RIP、IGMP</td>
+</tr>
+<tr>
+<td style="text-align:center">数据链路层</td>
+<td style="text-align:center">ARP、RAPP、CSMD/CD、PPP</td>
+</tr>
+<tr>
+<td style="text-align:center">物理层</td>
+<td style="text-align:center">FE自协商、Manchester、MLT-3</td>
+</tr>
+</tbody>
+</table>
+<h3 id="握手与挥手"><a href="#握手与挥手" class="headerlink" title="握手与挥手"></a>握手与挥手</h3><h4 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h4><p> <em>握手只能由客户端发起，三次握手用以同步客户端和服务端的序列号和确认号，并交换TCP窗口大小信息。</em></p>
+<p><strong>1. 客户端发送一个带SYN=1，Seq=X的数据包到服务器端口。</strong><br>（第一次握手由客户端发起，告诉服务器，我要发送请求了）<br><strong>2. 服务器收到客户端发来的第一个数据包后，回一个带SYN=1，ACK=X+1，Seq=Y的响应包以传达确认信息。</strong><br>（第二次握手由服务端发起，告诉客户端，我准备好了，你赶紧发送吧。）<br><strong>3. 客户端收到服务端的响应包后，回传一个带ACK=Y+1，Seq=Z的数据包，代表握手结束，TCP连接建立。</strong><br>（第三次握手由客户端发送，告诉服务端，我马上发送了，准备接收吧。）</p>
+<h5 id="为什么需要三次握手"><a href="#为什么需要三次握手" class="headerlink" title="为什么需要三次握手"></a>为什么需要三次握手</h5><blockquote>
+<p>谢希仁《计算机网络》中提到：“是为了防止已失效的连接请求报文段突然又传送到服务端，产生错误”<br><strong>因为在现实网络环境并不是那么理想，客户端或服务端发送的报文都可能会在网络某处中阻塞导致延迟到达，而如果此时服务器还认为这是一次连接请求，那么就会导致一直等待客户端发送下一次请求，从而影响服务器的性能</strong></p>
+</blockquote>
+<h4 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h4><p><em>中断连接的可以是客户端也可以是服务器端，以客户端主动断开为例。</em></p>
+<p><strong>1. 客户端发送一个数据分段，其中FIN标记设为1，客户端进入FIN-WAIT状态，该状态下客户端只接收数据，不再发送数据。</strong><br>（发起挥手一端在第一次挥手后进入等待阶段，告诉服务端再见吧）<br><strong>2. 服务端收到发来的带有FIN=1的数据分段，发送带有ACK=1的剩余数据分段，确认收到了客户端发来的FIN信息</strong><br>（第二次挥手，服务端告诉客户端，你说再见我知道了，可能还有数据给你，你等着吧）<br><strong>3. 服务端在所有数据传输结束后，向客户端发送一个带有FIN=1的数据分段，并进入CLOSE-WAIT状态，等待客户端发来带有ACK=1的确认报文，在收到这个ACK=1的确认报文后，服务器会关闭连接</strong><br>（第三次挥手，服务器说我准备好再见了，你关闭连接了就告诉我）<br><strong>4. 客户端收到服务端发来带有FIN=1的报文。返回ACK=1的报文确认，但为了防止服务器没收到而需要重发，客户端会进入TIME-WAIT状态，服务器收到报文关闭连接，客户端等待2MSL后如果没收到回复，则认为服务器关闭，客户端也关闭。</strong></p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;notes</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+                    <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

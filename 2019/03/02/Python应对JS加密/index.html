@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim">
+    <link rel="icon" type="image/png" href="http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="���ˣ��ϵܣ�">
+    <meta name="author" content="John Doe">
+    <meta name="keywords" content>
+    <title>Python爬虫应对网页JavaScirpt混淆/加密 ~ PFISH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/github.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>PFISH</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">About</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("http://cdn.pfish.xyz/pic/20190302/Mbv8boBESUFO.png")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">Python爬虫应对网页JavaScirpt混淆/加密</p>
+            <br>
+            
+            <p>Saturday, March 2nd 2019, 2:50 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <p>最近在处理一个登录爬虫时，遇到了在网页端运用JavaScript混淆和对用户名密码加密的手段，但不是很复杂。<br><a id="more"></a></p>
+<h1 id="从何说起"><a href="#从何说起" class="headerlink" title="从何说起"></a>从何说起</h1><p>缘由是在准备用 Python requests 进行模拟登录一个网页，惯例通过抓包发现网页表单往后端 Post 输入的用户名和密码的时候进行了加密；</p>
+<p>我想大概率还是开发人员针对安全考虑，不像某些网页直接往后端明文发送一些敏感数据。但这也对爬虫登录带来了小小的麻烦。</p>
+<p>接下来的操作就是找到负责这一部分功能的代码，然后要么试着模拟代码用方便的语言实现相同的操作，要么是直接把该代码下载下来，用Python相关的工具运行。</p>
+<h4 id="找到它"><a href="#找到它" class="headerlink" title="找到它"></a>找到它</h4><p>在HTML代码中和抓包记录中找到该 JS 函数</p>
+<p>发现，这跟平常的 JS 不一样，这就涉及到一个叫做<strong>JavaScript 加密/混淆</strong>的概念：</p>
+<h3 id="JavaScript-混淆-加密"><a href="#JavaScript-混淆-加密" class="headerlink" title="JavaScript 混淆/加密"></a>JavaScript 混淆/加密</h3><p><strong>混淆：经过编码将变量和函数原命名改为毫无意义的命名（如function(a,b,c,e,g)等），以防止他人窥视和窃取 Javascript 源代码，也有一定压缩效果。</strong></p>
+<p><strong>加密：一般用eval方法加密，效果与混淆相似，也做到了压缩的效果。</strong></p>
+<p><strong>压缩：删除 Javascript 代码中所有注释、跳格符号、换行符号及无用的空格，从而压缩 JS 文件大小，优化页面加载速度。</strong></p>
+<pre><code class="JavaScript">// 被加密混淆后的 JavaScript 代码：
+ eval(function(p, a, c, k, e, d) {
+    e = function(c) {
+        return (c &lt; a ? &quot;&quot; : e(parseInt(c / a))) + ((c = c % a) &gt; 35 ? String.fromCharCode(c + 29) : c.toString(36))
+    }
+    ;
+    if (!&#39;&#39;.replace(/^/, String)) {
+        while (c--)
+            d[e(c)] = k[c] || e(c);
+        k = [function(e) {
+            return d[e]
+        }
+        ];
+        e = function() {
+            return &#39;\\w+&#39;
+        }
+        ;
+        c = 1;
+    }
+    ;while (c--)
+        if (k[c])
+            p = p.replace(new RegExp(&#39;\\b&#39; + e(c) + &#39;\\b&#39;,&#39;g&#39;), k[c]);
+    return p;
+}(&#39;b 9=&quot;o+/=&quot;;p q(a){b e=&quot;&quot;;b 8,5,7=&quot;&quot;;b f,g,c,1=&quot;&quot;;b i=0;m{8=a.h(i++);5=a.h(i++);7=a.h(i++);f=8&gt;&gt;2;g=((8&amp;3)&lt;&lt;4)|(5&gt;&gt;4);c=((5&amp;s)&lt;&lt;2)|(7&gt;&gt;6);1=7&amp;t;k(j(5)){c=1=l}v k(j(7)){1=l}e=e+9.d(f)+9.d(g)+9.d(c)+9.d(1);8=5=7=&quot;&quot;;f=g=c=1=&quot;&quot;}u(i&lt;a.n);r e}&#39;, 32, 32, &#39;|enc4||||chr2||chr3|chr1|keyStr|input|var|enc3|charAt|output|enc1|enc2|charCodeAt||isNaN|if|64|do|length|ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789|function|encodeInp|return|15|63|while|else&#39;.split(&#39;|&#39;), 0, {}))
+
+</code></pre>
+<p> 看起来真是一团乱，不知道的以为是这程序员在炫技…</p>
+<p> 至于怎么还原（解密），现在有很多工具类的网站都能够做到：<br> <a href="http://www.bm8.com.cn/jsConfusion/" target="_blank" rel="noopener">http://www.bm8.com.cn/jsConfusion/</a></p>
+<pre><code class="JavaScript"> // 经过反混淆后的 JavaScript 代码
+
+ var keyStr = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=&quot;;
+
+function encodeInp(input) {
+    var output = &quot;&quot;;
+    var chr1, chr2, chr3 = &quot;&quot;;
+    var enc1, enc2, enc3, enc4 = &quot;&quot;;
+    var i = 0;
+    do {
+        chr1 = input.charCodeAt(i++);
+        chr2 = input.charCodeAt(i++);
+        chr3 = input.charCodeAt(i++);
+        enc1 = chr1 &gt;&gt; 2;
+        enc2 = ((chr1 &amp; 3) &lt;&lt; 4) | (chr2 &gt;&gt; 4);
+        enc3 = ((chr2 &amp; 15) &lt;&lt; 2) | (chr3 &gt;&gt; 6);
+        enc4 = chr3 &amp; 63;
+        if (isNaN(chr2)) {
+            enc3 = enc4 = 64
+        } else if (isNaN(chr3)) {
+            enc4 = 64
+        }
+        output = output + keyStr.charAt(enc1) + keyStr.charAt(enc2) + keyStr.charAt(enc3) + keyStr.charAt(enc4);
+        chr1 = chr2 = chr3 = &quot;&quot;;
+        enc1 = enc2 = enc3 = enc4 = &quot;&quot;
+    } while (i &lt; input.length);
+    return output
+}
+
+</code></pre>
+<p> 可以看到原来的 JS 代码是对字符进行了一些操作，前端加密，后端再解密。你可以用其他语言实现这个过程（高手，真正的高手），但最简单最方便最没风险，的还是直接拿来用。</p>
+<p> 不然出了偏差（</p>
+<h3 id="Python-运行-JavaScript-代码"><a href="#Python-运行-JavaScript-代码" class="headerlink" title="Python 运行 JavaScript 代码"></a>Python 运行 JavaScript 代码</h3><p>得到了原始的 JS 代码，那自然也就能利用它来加密数据，让后端服务器照样认为这是个从网页发来的正常请求。</p>
+<p>用 Python 来模拟运行 JavaScrip 的库有几个，这里用 <strong>PyExecJS</strong> 实现。</p>
+<ol>
+<li>首先需要 <code>pip install PyExcJS</code> 安装；</li>
+<li>确保机器中有 JavaScript 运行环境（没有的话安装一个 Node.js）</li>
+</ol>
+<p>检查一下：</p>
+<pre><code class="Python"> import execjs
+ print(execjs.get().name)
+</code></pre>
+<p> 我安装的是 Node.js 所以显示：</p>
+<pre><code class="shell">&gt;&gt;&gt; import execjs
+&gt;&gt;&gt; print(execjs.get().name)
+Node.js (V8)
+</code></pre>
+<p>一切准备就绪，那么就试试能不能达到这个效果。</p>
+<p>把要执行的 JS 代码保存成后缀为 .js 的文件</p>
+<p>Python 模拟运行 JavaScript 代码的代码：</p>
+<pre><code class="Python"> import execjs
+
+ node = execjs.get()
+ file = &#39;encode.js&#39;
+ ctx = node.compile(open(file).read())
+ # 原 JS 函数名 为 encodeInp()
+ user = &#39;encodeInp(&quot;{}&quot;)&#39;.format(username)
+ pwd = &#39;encodeInp(&quot;{}&quot;)&#39;.format(password)
+ # 网页向后端 POST 的格式
+ result = &#39;{}%%%{}&#39;.format(str(ctx.eval(user)), str(ctx.eval(password)
+</code></pre>
+<p>先通过 execjs.get() 方法声明一个运行环境，然后通过compile()方法来执行刚才保存的函数，接着构造一个字符串传递参数，最后eval()方法模拟执行返回结果。</p>
+<p>有了这个加密后的数据，就能直接用 requests 发送 POST 请求了：</p>
+<p> <code>response = requests.post(url, data={&quot;encoded&quot;: result})</code></p>
+<p> 但一般登录后如果还要进行页面跳转选择之类的操作的话，还得用 requests.Session() 方法</p>
+<pre><code class="Python">  import requests
+  session = requests.Session()
+  session.get(index_url)
+  response = session.post(login_url, data={&quot;encoded&quot;:result})
+  if response.status_code:
+    ...  
+</code></pre>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;Python</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+                    <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

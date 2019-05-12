@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim">
+    <link rel="icon" type="image/png" href="http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="���ˣ��ϵܣ�">
+    <meta name="author" content="John Doe">
+    <meta name="keywords" content>
+    <title>FFmpegNotes ~ PFISH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/github.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>PFISH</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">About</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("http://cdn.pfish.xyz/pic/20190126/DGr1LldOTfLW.png")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">FFmpegNotes</p>
+            <br>
+            
+            <p>Thursday, January 24th 2019, 3:47 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <p>一些关于学习FFmpeg的笔记，从未发现处理视频和音频原来可以这么简单！<br><a id="more"></a></p>
+<h3 id="FFmpeg"><a href="#FFmpeg" class="headerlink" title="FFmpeg"></a>FFmpeg</h3><blockquote>
+<p>FFmpeg是一个开源免费跨平台的视频和音频流方案，属于自由软件，采用LGPL或GPL许可证。它提供了录制、转换以及流化音视频的完整解决方案。</p>
+</blockquote>
+<p> <a href="http://ffmpeg.org/" target="_blank" rel="noopener">FFmpeg官网</a></p>
+<p><strong>以前大多都是进行web或者是爬虫方面的开发，对音视频处理应用方面接触不多 </strong></p>
+<h3 id="FFmpeg命令"><a href="#FFmpeg命令" class="headerlink" title="FFmpeg命令"></a>FFmpeg命令</h3><blockquote>
+<p>确保已正确安装ffmpeg并将其文件夹bin目录的路径加入环境变量中。<br>默认输入的原视频文件名为 input.mp4</p>
+</blockquote>
+<p>在命令行输入 <code>ffmpeg</code> 正常显示为下图则说明安装成功，可以使用了。</p>
+<p><img src="http://cdn.pfish.xyz/pic/20190126/jlSaVSTy1OWW.png" width="80%"></p>
+<h4 id="从原视频中提取出音频"><a href="#从原视频中提取出音频" class="headerlink" title="从原视频中提取出音频"></a>从原视频中提取出音频</h4><p><code>ffmpeg -i input.mp4 -vn -acodec aac -ar 44100 -ab 320k audio.aac</code></p>
+<p>参数说明：</p>
+<ul>
+<li>-vn 无视频</li>
+<li>-acodec 指定输出音频编码格式</li>
+<li>-ar 音频采样率</li>
+<li>-ab 码率</li>
+</ul>
+<p>最后为输出音频文件名 audio.aac</p>
+<h4 id="从原视频中分离视频"><a href="#从原视频中分离视频" class="headerlink" title="从原视频中分离视频"></a>从原视频中分离视频</h4><p> <code>ffmpeg -i input.mp4 -an -vcodec h264 video.mp4</code></p>
+<p> 参数说明：</p>
+<ul>
+<li>-an 无音频</li>
+<li>-vcodec 指定输出视频编码格式</li>
+</ul>
+<p>最后输出视频文件名video.mp4</p>
+<h4 id="将图片和音乐变成视频文件"><a href="#将图片和音乐变成视频文件" class="headerlink" title="将图片和音乐变成视频文件"></a>将图片和音乐变成视频文件</h4><p><code>ffmpeg -r 1/5 -i %d.jpg -i audio.aac -vcodec h264 -r 24 video.mp4</code></p>
+<p>参数说明：</p>
+<ul>
+<li>-r 每张图片的停留时间</li>
+<li>%d.jpg 匹配文件夹中的图片</li>
+<li>-vcodec 指定输出视频编码格式</li>
+<li>-r 帧</li>
+</ul>
+<p>最后输出视频文件名video.mp4</p>
+<h4 id="将彩色视频转换成黑白"><a href="#将彩色视频转换成黑白" class="headerlink" title="将彩色视频转换成黑白"></a>将彩色视频转换成黑白</h4><p><code>ffmpeg -i input.mp4 -vf lutyuv=&quot;u=128:v=128&quot; blackwhite.mp4</code></p>
+<p>参数说明：</p>
+<ul>
+<li>-vf 视频过滤器</li>
+</ul>
+<p>最后输出视频文件名blackwhite.mp4</p>
+<h4 id="从一段视频中截取出动态图片"><a href="#从一段视频中截取出动态图片" class="headerlink" title="从一段视频中截取出动态图片"></a>从一段视频中截取出动态图片</h4><p><code>ffmpeg -ss 20 -t 10 -i input.mp4 output.gif</code></p>
+<p>参数说明：</p>
+<ul>
+<li>-ss 选择从视频第几秒开始</li>
+<li>-t 时长</li>
+</ul>
+<p>最后输出动态图片文件名output.gif</p>
+<h4 id="生成音频的音频波型图"><a href="#生成音频的音频波型图" class="headerlink" title="生成音频的音频波型图"></a>生成音频的音频波型图</h4><p><code>ffmpeg -i audio.aac -lavfc showwavepic wave.png</code></p>
+<p>参数说明：</p>
+<ul>
+<li>-lavfi 音频过滤器</li>
+<li>showwavespic 生成波形图的命令参数</li>
+</ul>
+<p>最后输出波形图文件名wave.png</p>
+<p><img src="http://cdn.pfish.xyz/pic/20190126/SPutfAzJXFsd.png?imageslim" width="80%"></p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;notes</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+                    <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

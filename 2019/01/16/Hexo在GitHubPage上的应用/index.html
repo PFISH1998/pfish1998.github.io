@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim">
+    <link rel="icon" type="image/png" href="http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="���ˣ��ϵܣ�">
+    <meta name="author" content="John Doe">
+    <meta name="keywords" content>
+    <title>Hexo在GitHubPages上的应用 ~ PFISH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/github.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>PFISH</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">About</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("http://cdn.pfish.xyz/pic/20190116/3hyL7kWcVKrO.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">Hexo在GitHubPages上的应用</p>
+            <br>
+            
+            <p>Wednesday, January 16th 2019, 3:36 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <p>在GitHub上用Hexo主题搭建一个简单的个人博客，使用MarkDown格式发布。</p>
+<a id="more"></a>
+<h3 id="GitHubPages"><a href="#GitHubPages" class="headerlink" title="GitHubPages"></a>GitHubPages</h3><blockquote>
+<p>当你在 GitHub 新建一个名为 yourusername.io 的 repositories 时，就默认创建了一个网址为  <a href="https://yourusername.github.io" target="_blank" rel="noopener">https://yourusername.github.io</a> 的GitHubPage</p>
+</blockquote>
+<p>你可以在上面放上一个 index.md 或者 index.html 之类的<strong>静态页面</strong>, 这样别人就能通过域名访问了！也可以绑定自定义域名，然后在你的域名控制台添加一条 CNAME 记录来实现自定义域名访问。我的: <a href="https://pfish.xyz" target="_blank" rel="noopener">https://pfish.xyz</a></p>
+<p>你可以用此来搭建一个免费的个人博客。在我看来，这也比在云服务器部署一个 wordpress 之类的个人网站其实要方便一些，也不用过多的维护。</p>
+<h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><blockquote>
+<p>Hexo是一个博客框架，支持Markdown，只需一条指令即可部署到 GitHub Pages, Heroku 或其他网站。</p>
+</blockquote>
+<p><a href="https://hexo.io/" target="_blank" rel="noopener">Hexo官网</a></p>
+<p>你需要知道一些 Git 的基本使用，并且在电脑上安装 Node.js 和 Git，<br>安装及部署可参考其他写的更好的文章。（我很懒）</p>
+<p> <strong>不过别急，建议看完本篇再动手干</strong></p>
+<h3 id="跳坑及操作指南"><a href="#跳坑及操作指南" class="headerlink" title="跳坑及操作指南"></a>跳坑及操作指南</h3><blockquote>
+<p>类似教程都相当多了，个人建议主要参考官方文档，下面列出一些自己踩过的坑，以及一些奇技淫巧，相信很多问题大部分人也会遇到，回头看也是相当的脑残。</p>
+</blockquote>
+<h4 id="用不同分支保存静态网站文件和博客源文件"><a href="#用不同分支保存静态网站文件和博客源文件" class="headerlink" title="用不同分支保存静态网站文件和博客源文件"></a>用不同分支保存静态网站文件和博客源文件</h4><p>（配置好的情况下）在项目文件夹中使用命令 <code>hexo d</code> 会自动将相关文件push 到你仓库的 master 分支里。在你的库里，master 只负责保存你部署的静态网站的相关文件：</p>
+<ul>
+<li>index.html等网页文件</li>
+<li>js,css等和上传的图片img文件</li>
+<li>CNAME 域名信息文件（在 source 文件夹新建一个）</li>
+</ul>
+<p><img src="http://cdn.pfish.xyz/pic/20190116/BbiHqxQLLkHu.png?imageslim" width="100%"></p>
+<p> 所以！千万不要将项目里所有的文件手动 push 到 master 分支。</p>
+<p>  <strong>而如果想把源文件同时备份一份到GitHub上呢？</strong></p>
+<p>  那么就在你的库中新建一个分支，并设为主分支。（这不影响网站的访问和显示）</p>
+<p>  然后将它 clone 到本地某个位置，将项目文件夹中除了 .git 文件夹之外的所有文件和文件夹都 copy 过去，Themes主题文件夹中的 .git 文件夹删除才能commit，然后可以用 GitBash 检查一下是否在你新建的那个分支，接着就可以把项目文件备份到 GitHub，同时使用 <code>hexo d</code> 也会自动的将你写好的 md 文件 push 到master 分支。非常爽！</p>
+<h4 id="npm-和-Git"><a href="#npm-和-Git" class="headerlink" title="npm 和 Git"></a>npm 和 Git</h4><p>npm这东西接触的不太久，用起来有时候一言难尽，建议修改一下源，install 的时候坐和放宽，很多时候的问题就是 npm 没装好 或者是git clone 项目的时候出的问题，多试几次，失败了就全删了再试几次，疯了就好了。</p>
+<h4 id="Themes主题"><a href="#Themes主题" class="headerlink" title="Themes主题"></a>Themes主题</h4><p>尝试过一些主题，<code>hexo g</code> 和 <code>hexo s</code> 后本地运行可能会出现  index.html 丢失的情况，部署上去一样。我的解决办法就是换一个就好了。</p>
+<p>主题相关配置文件在该主题文件夹下的 _config.yml 文件中，你可以按需更改成你满意的样式。</p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;GitHub,Hexo,博客</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+                    <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

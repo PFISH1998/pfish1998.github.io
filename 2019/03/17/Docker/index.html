@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim">
+    <link rel="icon" type="image/png" href="http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="���ˣ��ϵܣ�">
+    <meta name="author" content="John Doe">
+    <meta name="keywords" content>
+    <title>DockerNote ~ PFISH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/github.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>PFISH</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">About</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("http://cdn.pfish.xyz/image/20190317/d0lqcKjJo7yu.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">DockerNote</p>
+            <br>
+            
+            <p>Sunday, March 17th 2019, 4:56 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <p>关于Docker的一些东西🐋</p>
+<a id="more"></a>
+<h1 id="Docker-原理和一些操作笔记"><a href="#Docker-原理和一些操作笔记" class="headerlink" title="Docker 原理和一些操作笔记"></a>Docker 原理和一些操作笔记</h1><h2 id="Docker-的原理"><a href="#Docker-的原理" class="headerlink" title="Docker 的原理"></a>Docker 的原理</h2><p>Docker 核心是利用 LXC(Linux Container) 来实现类似 VM 的功能，从而更加高效的利用硬件资源。与 VM 不同的，LXC 并不是一套硬件虚拟化方法，而是一个操作系统级的虚拟化方法。</p>
+<p>它主要利用了 LXC 的 container，namespace, cgroup 等技术来实现与 VM 相似的隔离性和对资源的调配管理等功能。在 LXC 的基础上进行了进一步的封装，让用户不需要过多关心容器的管理，使得操作更加方便。</p>
+<h3 id="Linux-Container-LXC"><a href="#Linux-Container-LXC" class="headerlink" title="Linux Container (LXC)"></a>Linux Container (LXC)</h3><p>LXC 是一种轻量级的虚拟化手段。可以提供一个共享Kernel的轻量级的虚拟化，以便隔离进程和资源。有效的将单个操作系统管理的资源划分到各个孤立的组中。与传统虚拟技术相比，它的优势在于：</p>
+<ol>
+<li>与宿主机使用用一个内核。</li>
+<li>不需要指令级模拟。</li>
+<li>容器可以在CPU核心的本地运行指令，不需要解释机制。</li>
+<li>避免了准虚拟化和系统调用中的复杂性。</li>
+<li>轻量级隔离，隔离的同时还提供共享机制，以实现容器与宿主机的资源共享。</li>
+</ol>
+<h3 id="Linux-Namespace"><a href="#Linux-Namespace" class="headerlink" title="Linux Namespace"></a>Linux Namespace</h3><p>LXC 所实现的隔离性主要是来自于 kernel 的 Namespace.</p>
+<p>Namespace 可以有效的帮助 Docker 将进程树、网络接口、消息、挂载点以及进程中的通信资源等隔离开。</p>
+<h4 id="pid-namespace"><a href="#pid-namespace" class="headerlink" title="pid namespace"></a>pid namespace</h4><p>可以将不同的进程隔离开，在不同的 namespace 中可以有相同的 pid。并且 namespace 允许嵌套，父 namespace 可以影响子 namespace 进程。</p>
+<p>所有的 LXC 进程在 docker 中的进程的父进程为 docker 进程。</p>
+<h4 id="net-namespace"><a href="#net-namespace" class="headerlink" title="net namespace"></a>net namespace</h4><p>拥有独立的 network devices, IP address, IP routing tables, /proc/net 目录。这样每个 container 的网络就能隔离开。</p>
+<p>LXC 在此基础上有5中网络类型，docker 默认采用 veth 的方式将 container 中的虚拟网卡同 host 上的一个 docker bridge 连接在一起。</p>
+<h4 id="ipc-namespace"><a href="#ipc-namespace" class="headerlink" title="ipc namespace"></a>ipc namespace</h4><p>container 中进程交互还是采用 Linux 常见的进程间交互方法(interprocess communication - IPC), 包括常见的信号量、消息队列和共享内存</p>
+<h4 id="mnt-namespace"><a href="#mnt-namespace" class="headerlink" title="mnt namespace"></a>mnt namespace</h4><p>类似与chroot，将一个进程放到一个特定的目录执行。 mnt namespace 允许不同namespace 的进程看到的文件目录不同，这样每个 namespace 中的进程所看到的文件目录就被隔离开了。</p>
+<h4 id="uts-namespace"><a href="#uts-namespace" class="headerlink" title="uts namespace"></a>uts namespace</h4><p>UTS(UNIX Time-sharing Systerm) namespace 允许每个 container 拥有独立的 hostname 和 domain name, 使其在网络上可以被视为一个独立的节点而非 Host 上的一个进程。</p>
+<h4 id="user-namespace"><a href="#user-namespace" class="headerlink" title="user namespace"></a>user namespace</h4><p>每个 container 可以有不同的 user 和 group id， 也就是说可以以 container 内部的用户在 container 内部执行程序，而非 Host 上的用户。</p>
+<p>有上述6中 namespace 从进程、网络、IPC、文件系统、UTS和用户角度的隔离，一个 container 就可以对外展现出一个独立计算机的能力，并且不同 container 从 OS 的层面实现了隔离。</p>
+<h3 id="Control-Groups-Cgroups"><a href="#Control-Groups-Cgroups" class="headerlink" title="Control Groups (Cgroups)"></a>Control Groups (Cgroups)</h3><p>Cgroups 实现了对资源的配额和度量。Cgoups 的使用类似文件的接口，</p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;notes</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+                    <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

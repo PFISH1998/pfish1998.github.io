@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim">
+    <link rel="icon" type="image/png" href="http://cdn.pfish.xyz/pic/20190126/ufc14qxxttQM.png?imageslim">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="���ˣ��ϵܣ�">
+    <meta name="author" content="John Doe">
+    <meta name="keywords" content>
+    <title>利用 Kafka、Spark Streaming、Pyspark 整合搭建流式数据分析环境 ~ PFISH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/github.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>PFISH</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">About</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("https://ws2.sinaimg.cn/large/006tNc79ly1g2yip3lqadj31900u0hdu.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">利用 Kafka、Spark Streaming、Pyspark 整合搭建流式数据分析环境</p>
+            <br>
+            
+            <p>Sunday, May 12th 2019, 2:16 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>主要需求是用 Scrapy-Redis 爬取的数据直接由 Scrapy Pipeline 接入 Kafka，再利用 Kafka 消息队列作为数据源，Python 操作 Spark Streaming 接收 Kafka 数据进行实时计算。</p>
+<p>这样比定时任务或者 MapReduce 更加灵活。也可以省去 Scrapy 的数据存入 MongoDB 后，再从 MongoDB 取数据分析这样繁琐和消耗资源的操作。</p>
+<a id="more"></a>
+<p>本篇主要是进行后一部分 <code>data -&gt; kafka -&gt; Spark Streaming -&gt; result</code> 的组合配置的测试试验，使用 Python 版本为3.6.2。至于Spark Streaming 的数据流分析的一些策略(比如流式数据并不是时间序列, 数据的累积计算等)暂时没有很好的思路，欢迎有经验的同学一起交流一下。</p>
+<p>经过无数踩坑，总结出一种可行的版本组合，大多数存在的问题也基本都是版本匹配和 jar 包版本问题，为了试验的简便，暂时没有做分布式的配置和测试。</p>
+<p><strong>如有纰漏或错误，欢迎及时指出。</strong></p>
+<h2 id="基本环境及配置"><a href="#基本环境及配置" class="headerlink" title="基本环境及配置"></a>基本环境及配置</h2><h3 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h3><p>(版本非常重要，安装软件请严格按照以下要求，否则可能出现各种问题)</p>
+<ul>
+<li>CentOS 7.6</li>
+<li>Python-3.6.2</li>
+<li>JDK-1.8.0</li>
+<li>Scala-2.11</li>
+<li>Hadoop-2.7.7</li>
+<li>Spark-2.3.3</li>
+<li>Kafka-2.2.0</li>
+</ul>
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>本篇着重于核心部分的配置说明，有关于JDK，Python 以及 Scala 和 Hadoop 的基本搭建可以自行按照制定的版本进行安装并配置好环境变量，保证能够正常使用后继续进行下一步的操作。否则不能确保最终搭建成功。</p>
+<p>本篇所有软件包都直接下载在 <code>/home/hadoop/</code> 等同于 <code>~/</code> 目录下，所以下文配置的路径和有关命令也以此为准。请根据自己的实际情况作出更改。</p>
+<h4 id="Hadoop-和-JDK-1-8-0"><a href="#Hadoop-和-JDK-1-8-0" class="headerlink" title="Hadoop 和 JDK-1.8.0"></a>Hadoop 和 JDK-1.8.0</h4><p>这一部分内容较多，也是基础工作，不过多提及。可参照网上其他相关教程做好配置工作。</p>
+<h4 id="Python-3-6-2"><a href="#Python-3-6-2" class="headerlink" title="Python-3.6.2"></a>Python-3.6.2</h4><p>安装配置好 Python-3.6.2。</p>
+<p>简略步骤：</p>
+<h5 id="0-下载安装相关必要的工具"><a href="#0-下载安装相关必要的工具" class="headerlink" title="0. 下载安装相关必要的工具"></a>0. 下载安装相关必要的工具</h5><pre><code class="shell">yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make
+</code></pre>
+<p>我系统环境中自带 python2.7, 备份一下</p>
+<pre><code class="shell">mv /usr/bin/python /usr/bin/python.bak
+</code></pre>
+<h5 id="1-官网下载-Python-3-6-2"><a href="#1-官网下载-Python-3-6-2" class="headerlink" title="1. 官网下载 Python-3.6.2"></a>1. 官网下载 Python-3.6.2</h5><pre><code class="shell">wget https://www.python.org/ftp/python/3.6.2/Python-3.6.2.tar.xz
+</code></pre>
+<h5 id="2-解压-编译-安装"><a href="#2-解压-编译-安装" class="headerlink" title="2. 解压-编译-安装"></a>2. 解压-编译-安装</h5><pre><code class="shell">tar -zxvf  Python-3.6.2.tar.xz
+
+cd Python-3.6.2
+
+./configure prefix=/usr/local/python3
+
+make &amp;&amp; make install
+</code></pre>
+<h5 id="3-配置环境"><a href="#3-配置环境" class="headerlink" title="3. 配置环境"></a>3. 配置环境</h5><p>添加软链接。</p>
+<pre><code class="shell">ln -s /usr/local/python3/bin/python3 /usr/bin/python
+</code></pre>
+<p>pip 也添加一下。</p>
+<pre><code class="shell">ln -s /usr/local/python3/bin/pip3 /usr/bin/pip
+</code></pre>
+<p>因为执行yum需要python2版本，所以我们还要修改yum的配置，执行：</p>
+<pre><code class="shell">vi /usr/bin/yum
+</code></pre>
+<p>把 <code>#! /usr/bin/python</code> 修改为 <code>#! /usr/bin/python2</code></p>
+<p>同理:</p>
+<pre><code class="shell">vi /usr/libexec/urlgrabber-ext-down
+</code></pre>
+<p>文件里面的 <code>#! /usr/bin/python</code> 也要修改为 <code>#! /usr/bin/python2</code></p>
+<h5 id="4-最终结果"><a href="#4-最终结果" class="headerlink" title="4. 最终结果"></a>4. 最终结果</h5><p>使用 <code>python2</code> 命令可以对应 <code>python2.7</code></p>
+<p>使用 <code>python</code> 命令可以对应 <code>python3.6.2</code></p>
+<p>使用 <code>pip list</code> 命令能显示已安装的包。</p>
+<h5 id="5-还要安装一些所需的包"><a href="#5-还要安装一些所需的包" class="headerlink" title="5. 还要安装一些所需的包"></a>5. 还要安装一些所需的包</h5><pre><code class="shell">pip install kafka
+</code></pre>
+<pre><code class="shell">pip install pyspark
+</code></pre>
+<h4 id="Scala-2-11"><a href="#Scala-2-11" class="headerlink" title="Scala-2.11"></a>Scala-2.11</h4><p>Spark-2.3.3 自带 Scala-2.11</p>
+<h4 id="Kafka-2-2-0"><a href="#Kafka-2-2-0" class="headerlink" title="Kafka-2.2.0"></a>Kafka-2.2.0</h4><p><strong>下载 Kafka-2.2.0</strong></p>
+<pre><code class="shell">cd ~
+
+wget http://mirrors.tuna.tsinghua.edu.cn/apache/kafka/2.2.0/kafka-2.2.0-src.tgz
+</code></pre>
+<p><strong>解压</strong></p>
+<pre><code class="shell">tar -zxvf kafka-2.2.0-src.tgz
+
+mv kafka-2.2.0-src.tgz kafka
+</code></pre>
+<p><strong>测试</strong></p>
+<p>因为下载的 kafka 已经自带 Zookeeper，不需要额外安装，运行 Kafka 之前直接使用。</p>
+<p>首先使用一个命令行窗口启动 Zookeeper.</p>
+<pre><code class="shell">cd ~/kafka
+
+bin/zookeeper-server-start.sh config/zookeeper.properties
+</code></pre>
+<p>启动成功后不要关闭终端或退出，否则 Zookeeper 服务也会停止。打开一个新的终端，用来启动 Kafka.</p>
+<pre><code class="shell">cd ~/kafka
+
+bin/kafka-server-start.sh config/server.properties
+</code></pre>
+<p>kafka 启动后同样不要关闭，再打开一个新的终端，进行测试。</p>
+<p>创建一个 topic，topic 是消息发布的 category，接受消息也需要指定 topic</p>
+<pre><code class="shell">cd ~/kafka
+
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testmsg
+</code></pre>
+<p>创建一个 producer 来生产消息。</p>
+<pre><code class="shell">bin/kafka-console-producer.sh --broker-list localhost:9092 --topic testmsg
+</code></pre>
+<p>运行成功后 出现 &gt; 输入几条数据如:</p>
+<p><code>hello world</code></p>
+<p><code>hello kafka</code></p>
+<p><code>hello spark</code></p>
+<p>再次开启一个新的终端，创建一个 consumer 来接收消息。</p>
+<pre><code class="shell">cd ~/kafka
+
+bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic testmag --from-beginning
+</code></pre>
+<p>如果一切正常，出现上面在 producer 输入的消息。说明 kafka 能够正常使用。</p>
+<h4 id="Spark-2-3-3-环境搭建及测试"><a href="#Spark-2-3-3-环境搭建及测试" class="headerlink" title="Spark-2.3.3 环境搭建及测试"></a>Spark-2.3.3 环境搭建及测试</h4><h5 id="1-安装配置-Spark-2-3-3"><a href="#1-安装配置-Spark-2-3-3" class="headerlink" title="1. 安装配置 Spark-2.3.3"></a>1. 安装配置 Spark-2.3.3</h5><p>Saprk 2.3.3 适用于 Scala 2.11版本，所以务必保证已经安装 Scala 2.11。这是 Spark 网站上的说明：</p>
+<blockquote>
+<p>Note that, Spark is pre-built with Scala 2.12 since version 2.4.2. Previous versions are pre-built with Scala 2.11.</p>
+</blockquote>
+<p>其实因为已经安装有 Hadoop2.7.7 环境， 可以选择不带Hadoop 的 <code>spark-2.3.3-bin-without-hadoop.tgz</code> 下载，但是这个版本没有国内镜像链接，我们下载另一个也是有效的。</p>
+<p>使用清华大学开源镜像站的链接：</p>
+<pre><code class="shell">http://mirrors.tuna.tsinghua.edu.cn/apache/spark/spark-2.3.3/spark-2.3.3-bin-hadoop2.7.tgz
+</code></pre>
+<p><strong>下载-解压-改名</strong></p>
+<pre><code class="shell">cd ~
+
+wget http://mirrors.tuna.tsinghua.edu.cn/apache/spark/spark-2.3.3/spark-2.3.3-bin-hadoop2.7.tgz
+
+tar -zxvf spark-2.3.3-bin-hadoop2.7.tgz
+
+mv spark-2.3.3-bin-hadoop2.7.tgz spark
+</code></pre>
+<p><strong>配置 Spark</strong></p>
+<p>进入 <code>spark/conf/</code> 目录，将 <code>conf/</code> 目录中的 <code>spark-env.sh.template</code> 拷贝一份为 <code>spark-env.sh 作为 Spark</code> 的配置文件：</p>
+<pre><code class="shell">cd spark/conf
+
+mv spark-env.sh.template spark-env.sh
+
+vi spark-env.sh
+</code></pre>
+<p>编辑，在文件第二行开始添加：</p>
+<blockquote>
+<p>注：/usr/bin/python 为你环境的 python 命令目录，spark默认使用 Python2，我们使用 Python3，且确保 python 命令能使用 python3，如果 python3 命令能运行则改成 python3</p>
+</blockquote>
+<pre><code class="shell">export SPARK_DIST_CLASSPATH=$(/home/hadoop/hadoop/bin/hadoop classpath):/home/hadoop/spark/jars/kafka/*:/home/hadoop/kafka/libs/*
+export PYSPARK_PYTHON=/usr/bin/python
+</code></pre>
+<p>这样就指定了相关 jar 包的路径。</p>
+<p>在 <code>spark/libs</code> 目录中下载相关 jar 包（<strong>重要</strong>）</p>
+<p>在这一步需要严格按照 Kafka 和 Spark 的版本下载 jar 包，组合运行时很多错误就是在这一步造成的。</p>
+<p>我们使用的版本 Scala-2.11, Kafka-2.2.0, Spark-2.3.3 所以需要在 mvnrepository.com 下载3个 jar 包。</p>
+<p>(有些版本只说下载第二个，但在这个版本组合下我实际情况测试后也会出问题，提示无法找到相关方法或者无法连接 kafka consumer）</p>
+<p>官方说明中 <code>kafka-0-10</code> 是不支持 Python 的，所以注意我们下载的版本为 <code>kafka-0-8</code>：</p>
+<p><code>spark-streaming-kafka-0-8-assembly_2.11-2.3.3.jar</code></p>
+<p><code>spark-streaming-kafka-0-8_2.11-2.3.3.jar</code></p>
+<p><code>spark-core_2.11-2.3.3.jar</code></p>
+<pre><code class="shell">cd ~/spark/libs
+
+wget http://central.maven.org/maven2/org/apache/spark/spark-streaming-kafka-0-8-assembly_2.11/2.3.3/spark-streaming-kafka-0-8-assembly_2.11-2.3.3.jar
+
+wget http://central.maven.org/maven2/org/apache/spark/spark-streaming-kafka-0-8_2.11/2.3.3/spark-streaming-kafka-0-8_2.11-2.3.3.jar
+
+wget http://central.maven.org/maven2/org/apache/spark/spark-core_2.11/2.3.3/spark-core_2.11-2.3.3.jar
+</code></pre>
+<p>在 <code>spark/jars</code> 下新建 <code>kafka</code> 文件夹，将 <code>kafka/libs</code> 下的所有 jar 包都拷贝进去。</p>
+<pre><code class="shell">cp ~/kafka/libs* .
+</code></pre>
+<p>到这 spark 单节点的配置基本就完成了，下面测试一下。</p>
+<h5 id="2-测试-Spark"><a href="#2-测试-Spark" class="headerlink" title="2. 测试 Spark"></a>2. 测试 Spark</h5><p>首先测试 pyspark。</p>
+<p>在终端进入 <code>spark/bin</code>, 输入 <code>./spark-shell</code></p>
+<pre><code class="shell">cd ~/spark/bin
+
+./spark-shell
+</code></pre>
+<p>稍等一会，在一堆日志信息后，如果出现如下大大的 Spark 图案和 scala 命令行说明 Spark 启动成功。</p>
+<pre><code class="shell">Spark session available as &#39;spark&#39;.
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  &#39;_/
+   /___/ .__/\_,_/_/ /_/\_\   version 2.3.3
+      /_/
+
+Using Scala version 2.11.8 (OpenJDK 64-Bit Server VM, Java 1.8.0_201)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala&gt;
+</code></pre>
+<p>退出后，再在当前目录输入 <code>./pysaprk</code></p>
+<pre><code class="shell">./pyspark
+</code></pre>
+<p>出现以下界面也就说明 pyspark 配置成功。再继续输入 <code>import kafka</code> 和 <code>import pyspark</code> 测试相关模块是否正确安装。<br>(如果不成功，检查 pyspark 和 kafka 模块是否安装)</p>
+<pre><code class="shell">Python 3.6.2 (default, May  2 2019, 04:58:04)
+[GCC 4.8.5 20150623 (Red Hat 4.8.5-36)] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+······
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+2019-05-07 03:15:36 WARN  Utils:66 - Service &#39;SparkUI&#39; could not bind on port 4040. Attempting port 4041.
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  &#39;_/
+   /__ / .__/\_,_/_/ /_/\_\   version 2.3.3
+      /_/
+
+Using Python version 3.6.2 (default, May  2 2019 04:58:04)
+SparkSession available as &#39;spark&#39;.
+&gt;&gt;&gt;import kafka
+&gt;&gt;&gt;import pyspark
+&gt;&gt;&gt;
+</code></pre>
+<h3 id="Kafka-与-Spark-Streaming-组合测试运行"><a href="#Kafka-与-Spark-Streaming-组合测试运行" class="headerlink" title="Kafka 与 Spark Streaming 组合测试运行"></a>Kafka 与 Spark Streaming 组合测试运行</h3><h4 id="代码准备"><a href="#代码准备" class="headerlink" title="代码准备"></a>代码准备</h4><p>在合适的位置下新建一个 <code>producer.py</code> 模拟 Kafka 生产数据。</p>
+<p><code>producer.py</code> 代码如下：</p>
+<pre><code class="python">from kafka import KafkaProducer
+import time
+import csv
+
+# 连接 Kafka
+producer = KafkaProducer(bootstrap_servers=&#39;localhost:9092&#39;)
+# user_log.csv 为自己虚拟的数据，建议可以使用单个字符或单词，以 &#39;,&#39; 隔开
+# 我这里以随机的 1 和 0 为数据
+csvfile = open(&quot;data/user_log.csv&quot;, &quot;r&quot;)
+reader = csv.reader(csvfile)
+
+for line in reader:
+    data = line[0]
+    # 延时 0.1 秒
+    time.sleep(0.1)
+    print(data)
+    producer.send(&#39;test&#39;, data.encode(&#39;utf8&#39;))
+</code></pre>
+<p>接下来，新建一个 <code>wordcount.py</code> 文件，使用 kafka 作为数据源，来测试组合后能否正常消费 kafka 里的数据。</p>
+<p><code>wordcount.py</code> 代码如下:</p>
+<pre><code class="python">from pyspark import SparkContext, SparkConf
+from pyspark.streaming import StreamingContext
+from pyspark.streaming.kafka import KafkaUtils
+
+def start():
+    conf = SparkConf().setAppName(&quot;TestCount&quot;)
+    sc = SparkContext(conf=conf)
+    sc.setLogLevel(&quot;ERROR&quot;)
+    # 设置 3 秒计算一次
+    ssc=StreamingContext(sc,3)
+    # 使用 checkpoint，所以需要启动 Hadoop
+    ssc.checkpoint(&quot;.&quot;)
+    # 使用 createStream 方式创建流
+    kafkaStreams = KafkaUtils.createStream(ssc,&quot;localhost:2181&quot;,&quot;1&quot;,{&quot;test&quot;:1})
+    # 简单的计算一下， x[1] 为数据的位置
+    result = kafkaStreams.map(lambda x: (x[1], 1)).reduceByKey(lambda a, b: a + b)
+    result.pprint()
+    ssc.start()
+    ssc.awaitTermination()
+
+if __name__ == &#39;__main__&#39;:
+    start()
+</code></pre>
+<h4 id="组合测试运行"><a href="#组合测试运行" class="headerlink" title="组合测试运行"></a>组合测试运行</h4><p>现在默认你的服务器环境中所有服务都为未启动状态，且上文要求的环境也都完成配置</p>
+<h5 id="1-启动-Hadoop"><a href="#1-启动-Hadoop" class="headerlink" title="1. 启动 Hadoop"></a>1. 启动 Hadoop</h5><p>使用 checkpoint 把数据存入 HDFS，所以需要启动 Hadoop</p>
+<pre><code class="shell">cd ~/hadoop/sbin/
+
+./start-all.sh
+</code></pre>
+<h5 id="2-启动-Zookeeper-服务和-Kafka"><a href="#2-启动-Zookeeper-服务和-Kafka" class="headerlink" title="2. 启动 Zookeeper 服务和 Kafka"></a>2. 启动 Zookeeper 服务和 Kafka</h5><p>参照上文启动 Zookeeper 和 Kafka 的方法:</p>
+<p>先启动 Zookeeper.</p>
+<pre><code class="shell">cd ~/kafka
+
+bin/zookeeper-server-start.sh config/zookeeper.propreties
+</code></pre>
+<p>启动 Zookeeper 成功后用另一个终端启动 kafka.</p>
+<pre><code class="shell">cd ~/kafka
+
+bin/kafka-server-start.sh config/zookeeper.propreties
+</code></pre>
+<p>如果有错误检查是否端口被占用或者之前开启的服务没停止，有的话直接 kill 掉再重新操作上述步骤。</p>
+<h5 id="3-运行-producer-py"><a href="#3-运行-producer-py" class="headerlink" title="3. 运行 producer.py"></a>3. 运行 producer.py</h5><p>再用一个新的终端运行 <code>producer.py</code></p>
+<pre><code class="shell">python producer.py
+</code></pre>
+<pre><code class="shell">···
+b&#39;1&#39;
+b&#39;0&#39;
+b&#39;1&#39;
+b&#39;1&#39;
+b&#39;1&#39;
+b&#39;0&#39;
+b&#39;1&#39;
+b&#39;1&#39;
+b&#39;0&#39;
+b&#39;1&#39;
+b&#39;0&#39;
+···
+</code></pre>
+<p>运行成功会打印出数据，不要退出或关闭，再用新的终端执行下面的操作。</p>
+<h5 id="4-运行-wordcount-py"><a href="#4-运行-wordcount-py" class="headerlink" title="4. 运行 wordcount.py"></a>4. 运行 wordcount.py</h5><p>这里需要用到 <code>spark-submit</code> 命令将 <code>wordcount.py</code> 提交给 spark 运行。</p>
+<pre><code class="shell">spark-submit wordcount.py
+</code></pre>
+<p>在一大堆提示信息后出现如下，就说明运行成功。</p>
+<pre><code class="shell">spark-submit wordcount.py
+······
+2019-05-07 05:06:40 INFO  SparkContext:54 - Running Spark version 2.3.3
+·······
+
+-------------------------------------------
+Time: 2019-05-07 05:15:30
+-------------------------------------------
+(&#39;1&#39;, 20)
+(&#39;0&#39;, 10)
+
+-------------------------------------------
+Time: 2019-05-07 05:15:33
+-------------------------------------------
+(&#39;0&#39;, 11)
+(&#39;1&#39;, 19)
+
+-------------------------------------------
+Time: 2019-05-07 05:15:36
+-------------------------------------------
+(&#39;1&#39;, 19)
+(&#39;0&#39;, 10)
+
+-------------------------------------------
+Time: 2019-05-07 05:15:39
+-------------------------------------------
+(&#39;1&#39;, 19)
+(&#39;0&#39;, 11)
+</code></pre>
+<p>结果显示的就是 Spark Streaming 按照预期按每三秒一次计算出了 1 和 0 出现的次数。</p>
+<p>到这基本就说明我们 <code>Kafka -&gt; Spark Streaming</code> 的测试环境搭建和组合配置都是成功的，有兴趣的同学可以继续尝试将 Kafka 和 Spark 都进行分布式的配置。</p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;Spark</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+                    <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>
